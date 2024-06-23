@@ -1,12 +1,11 @@
 [tool.poetry]
-name = "pythonproject4"
+name = "fastapi-template"
 version = "0.1.0"
 description = ""
 authors = ["Midnull <Midnull@DESKTOP>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
 python = "^3.12"
 fastapi = "^0.111.0"
 sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
