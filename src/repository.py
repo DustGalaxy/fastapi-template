@@ -146,13 +146,16 @@ def CrudFactory(model: SnippetModel):
             id_: str | UUID,
             column: str = "id",
         ) -> SnippetModel:
-
-            q = update(model).where(getattr(model, column) == id_).values(**data.model_dump(exclude_unset=True))
+            q = (
+                update(model)
+                .where(getattr(model, column) == id_)
+                .values(**data.model_dump(exclude_unset=True))
+                .returning(model)
+            )
 
             try:
-                await session.execute(q)
+                db_model = await session.execute(q)
                 await session.commit()
-                await session.refresh(db_model)
                 return db_model
             except IntegrityError as e:
                 raise IntegrityConflictException(
