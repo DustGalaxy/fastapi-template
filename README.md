@@ -1,5 +1,6 @@
 A simple template for fastapi application in which frequently used modules are collected.
 Modules:
+
 - python = "^3.12"
 - fastapi = "^0.111.0"
 - sqlalchemy = {extras = ["asyncio"], version = "^2.0.31"}
@@ -10,3 +11,4 @@ Modules:
 - uuid6 = "^2024.1.12"
 - icecream = "^2.1.3"
 - uvicorn = {extras = ["all"], version = "^0.30.1"}
+- python-dotenv = "^1.0.1"
