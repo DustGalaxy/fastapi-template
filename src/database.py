@@ -1,10 +1,9 @@
-import sqlalchemy
 from typing import AsyncGenerator
 from uuid import UUID as UUIDTYPE
 from datetime import datetime
 
 from uuid6 import uuid7
-from sqlalchemy import DateTime
+from sqlalchemy import DateTime, FunctionElement
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID as UUIDCOLUMN
 
@@ -13,15 +12,16 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from src.config import Config
 
-SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{Config.DB_USER}:{Config.DB_PASS}@{Config.DB_HOST}:{Config.DB_PORT}/{Config.DB_NAME}"
-
-engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
-async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+engine = create_async_engine(Config.DB_URL)
+async_session_maker = async_sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
+
 
 Base = declarative_base()
 
@@ -36,7 +36,7 @@ async def drop_db():
         await conn.run_sync(Base.metadata.drop_all)
 
 
-class UuidMixin:
+class UUIDMixin:
     id: Mapped[UUIDTYPE] = mapped_column(
         "id",
         UUIDCOLUMN(as_uuid=True),
@@ -48,7 +48,7 @@ class UuidMixin:
     )
 
 
-class utcnow(sqlalchemy.FunctionElement):
+class utcnow(FunctionElement):
     type = DateTime()
     inherit_cache = True
 

@@ -1,8 +1,10 @@
-from sqladmin import Admin, ModelView
+from sqladmin import ModelView
 
-from src.main import app
-from src.database import engine
+from src.app.model import User
 
-admin = Admin(app, engine)
 
-# register model below
+class UserAdmin(ModelView, model=User):
+    column_list = [User.id, User.name]
+
+
+# create admin view
